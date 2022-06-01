@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -22,13 +24,19 @@ class AuthController extends Controller
 
     public function storeRegister(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'fullname' => 'required|max:255',
             'username' => ['required', 'min:3', 'max:255', 'unique:users'],
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email:dns|unique:users',
             'password' => 'required|min:8|max:255'
         ]);
 
-        dd('Data berhasil divalidation...!!');
+        // $validatedData['password'] = bcrypt($validatedData['password']);
+        $validatedData['password'] = Hash::make($validatedData['password']);
+
+        User::create($validatedData);
+        // $request->session()->flash('success', 'Registration successfuly!!! Please login..');
+
+        return redirect('/login')->with('success', 'Registration successfuly!!! Please login..');
     }
 }
