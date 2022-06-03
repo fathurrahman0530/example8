@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3>Ini halaman home</h3>
+<h3>Welcome, Fathur Rahman</h3>
 @endsection

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +19,11 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/login', [AuthController::class, 'login']);
-Route::post('/login', [AuthController::class, 'storeLogin']);
-Route::get('/register', [AuthController::class, 'register']);
+Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
+Route::post('/login', [AuthController::class, 'authenticate']);
+Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::get('/register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('/register', [AuthController::class, 'storeRegister']);
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
