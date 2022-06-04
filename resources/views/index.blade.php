@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-    <h3>Ini halaman home</h3>
+    <h1 class="d-flex justify-content-center" style="margin-top: 150px">Welcome Group Chat Application</h1>
 @endsection

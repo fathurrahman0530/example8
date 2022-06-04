@@ -27,3 +27,4 @@ Route::get('/register', [AuthController::class, 'register'])->middleware('guest'
 Route::post('/register', [AuthController::class, 'storeRegister']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
+Route::get('/profile', [DashboardController::class, 'profile'])->middleware('auth');
