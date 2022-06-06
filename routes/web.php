@@ -28,3 +28,7 @@ Route::post('/register', [AuthController::class, 'storeRegister']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
 Route::get('/profile', [DashboardController::class, 'profile'])->middleware('auth');
+
+Route::get('/manage-role', [DashboardController::class, 'manageRole'])->middleware('auth');
+
+Route::post('/create-group', [DashboardController::class, 'storeGroup']);

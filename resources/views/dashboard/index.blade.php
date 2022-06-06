@@ -9,18 +9,22 @@
           <div class="hover-actions-trigger chat-contact nav-item" role="tab" id="chat-link-0" data-bs-toggle="tab" data-bs-target="#chat-0" aria-controls="chat-0" aria-selected="true">
             <div class="d-md-none d-lg-block">
               <div class="dropdown dropdown-active-trigger dropdown-chat">
-                <button class="hover-actions btn btn-link btn-sm text-400 dropdown-caret-none dropdown-toggle end-0 fs-0 mt-4 me-1 z-index-1 pb-2 mb-n2" type="button" data-boundary="viewport" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-cog" data-fa-transform="shrink-3 down-4"></span></button>
-                <div class="dropdown-menu dropdown-menu-end border py-2 rounded-2"><a class="dropdown-item" href="#!">Mute</a>
-                  <div class="dropdown-divider"></div><a class="dropdown-item" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
-                  <div class="dropdown-divider"></div><a class="dropdown-item" href="#!">Mark as Unread</a><a class="dropdown-item" href="#!">Something's Wrong</a><a class="dropdown-item" href="#!">Ignore Messsages</a><a class="dropdown-item" href="#!">Block Messages</a>
+                <button class="hover-actions btn btn-link btn-sm text-400 dropdown-caret-none dropdown-toggle end-0 fs-0 mt-4 me-1 z-index-1 pb-2 mb-n2" type="button" data-boundary="viewport" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <span class="fas fa-cog" data-fa-transform="shrink-3 down-4"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end border py-2 rounded-2">
+                  @if (Auth::user()->role == 1)
+                  <a class="dropdown-item text-danger" href="#!">Delete</a>
+                  @else
+                  <a class="dropdown-item text-danger" href="#!">Leave Group</a>
+                  @endif
                 </div>
               </div>
             </div>
             <div class="d-flex p-3">
               <div class="avatar avatar-xl">
                 <div class="rounded-circle overflow-hidden h-100 d-flex">
-                  <div class="w-50 border-end"><img src="../assets/img/team/1.jpg" alt="" /></div>
-                  <div class="w-50 d-flex flex-column"><img class="h-50 border-bottom" src="../assets/img/team/2.jpg" alt="" /><img class="h-50" src="../assets/img/team/3.jpg" alt="" /></div>
+                  <img src="{{asset('images/group.png')}}" alt="" />
                 </div>
               </div>
               <div class="flex-1 chat-contact-body ms-2 d-md-none d-lg-block">
@@ -34,9 +38,10 @@
       </div>
       <div class="contacts-search-wrapper">
         <div class="form-group mb-0 position-relative d-md-none d-lg-block w-100 h-100">
+          {{-- {{ dd(Auth::user()->role); }} --}}
+          @if (Auth::user()->role == 1)
           <button class="btn btn-primary form-control form-control-sm chat-contacts-search border-0 h-100" type="button" data-bs-toggle="modal" data-bs-target="#error-modal" style="color: black">Create Group</button>
-          {{-- <a href="#" class="form-control form-control-sm chat-contacts-search border-0 h-100 btn btn-primary" style="color: black">Create Group</a> --}}
-          {{-- <input class="form-control form-control-sm chat-contacts-search border-0 h-100" type="text" placeholder="Search contacts ..." /><span class="fas fa-search contacts-search-icon"></span> --}}
+          @endif
         </div>
       </div>
     </div>
@@ -49,8 +54,6 @@
               </a>
               <div class="min-w-0">
                 <h5 class="mb-0 text-truncate fs-0">Avengers</h5>
-                <div class="fs--2 text-400">Active 7h ago
-                </div>
               </div>
             </div>
             <div class="col-auto">
@@ -72,8 +75,12 @@
                   <h6 class="mb-0"><a class="text-decoration-none stretched-link text-700" href="../pages/user/profile.html">Avengers</a></h6>
                   <div class="dropdown z-index-1">
                     <button class="btn btn-link btn-sm text-400 dropdown-toggle dropdown-caret-none me-n3" type="button" id="profile-dropdown-1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="fas fa-cog"></span></button>
-                    <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="profile-dropdown-1"><a class="dropdown-item" href="#!">Mute</a>
-                      <div class="dropdown-divider"></div><a class="dropdown-item" href="#!">Archive</a><a class="dropdown-item text-danger" href="#!">Delete</a>
+                    <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="profile-dropdown-1">
+                      @if (Auth::user()->role == 1)
+                      <a class="dropdown-item" href="#!">Delete Group</a>
+                      <div class="dropdown-divider"></div>
+                      @endif
+                      <a class="dropdown-item" href="#!">Keluar Group</a>
                     </div>
                   </div>
                 </div>
@@ -151,7 +158,6 @@
             <div class="d-flex p-3">
               <div class="avatar avatar-l me-2">
                 <img class="rounded-circle" src="../assets/img/team/2.jpg" alt="" />
-
               </div>
               <div class="flex-1">
                 <div class="w-xxl-75">
@@ -186,7 +192,8 @@
                     <div class="bg-primary text-white p-2 rounded-2 chat-message light">I can help you to do this.
                     </div>
                   </div>
-                  <div class="text-400 fs--2 text-end">11:54 am<span class="fas fa-check ms-2 text-success"></span>
+                  <div class="text-400 fs--2 text-end">
+                    11:54 am
                   </div>
                 </div>
               </div>
@@ -253,27 +260,23 @@
       <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
         <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body p-0">
-        <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
-          <h4 class="mb-1" id="modalExampleDemoLabel">Add a new illustration </h4>
-        </div>
-        <div class="p-4 pb-0">
-          <form>
+      <form action="/create-group" method="POST">
+        <div class="modal-body p-0">
+          <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
+            <h4 class="mb-1" id="modalExampleDemoLabel">Add a new group</h4>
+          </div>
+          <div class="p-4 pb-0">
             <div class="mb-3">
-              <label class="col-form-label" for="recipient-name">Recipient:</label>
+              <label class="col-form-label" for="recipient-name">Name group</label>
               <input class="form-control" id="recipient-name" type="text" />
             </div>
-            <div class="mb-3">
-              <label class="col-form-label" for="message-text">Message:</label>
-              <textarea class="form-control" id="message-text"></textarea>
-            </div>
-          </form>
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
-        <button class="btn btn-primary" type="button">Understood </button>
-      </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary" type="submit" name="addGroup">Create Group</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
