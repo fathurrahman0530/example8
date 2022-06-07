@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MessagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +33,4 @@ Route::get('/profile', [DashboardController::class, 'profile'])->middleware('aut
 Route::get('/manage-role', [DashboardController::class, 'manageRole'])->middleware('auth');
 
 Route::post('/create-group', [DashboardController::class, 'storeGroup']);
-Route::get('/message/{id}');
+Route::get('/message/{id}', [MessagesController::class, 'showMessage']);
