@@ -3,13 +3,33 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\Message;
+use App\Models\Paticipan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $data = Group::all();
+        $dataGroup = [];
+        $userLogin = Auth::user()->id;
+        
+        if (Auth::user()->role == 1) {
+            $dataGroup = Group::all();
+        } else {
+            $participan = Paticipan::where('user_id', $userLogin)->get();
+            foreach ($participan as $p) {
+                $dataGroup[] = Group::find($p->group_id);
+            }
+        }
+
+        $data = [
+            'group' => $dataGroup,
+            'message' => Message::all()
+        ];
+        
         return view('dashboard.index', compact('data'));
     }
 
@@ -31,6 +51,7 @@ class DashboardController extends Controller
 
         $validateData = $request->validate([
             'name_group' => 'required|max:255',
+
         ]);
         
         Group::create([

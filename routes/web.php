@@ -32,3 +32,4 @@ Route::get('/profile', [DashboardController::class, 'profile'])->middleware('aut
 Route::get('/manage-role', [DashboardController::class, 'manageRole'])->middleware('auth');
 
 Route::post('/create-group', [DashboardController::class, 'storeGroup']);
+Route::get('/message/{id}');
