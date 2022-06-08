@@ -7,6 +7,13 @@
 <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#joinGroup">Join Group</button>
 @endif
 
+@if (session()->has('success'))
+<div class="alert alert-success alert-dismissible fade show col-md-3 container-fluid" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+@endif
+
 <div class="row">
 @foreach ($data['group'] as $row)
   <div class="col-lg mt-4">

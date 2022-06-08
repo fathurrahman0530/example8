@@ -10,4 +10,5 @@ class Paticipan extends Model
     use HasFactory;
 
     protected $tables = 'paticipans';
+    protected $guarded = ['id'];
 }

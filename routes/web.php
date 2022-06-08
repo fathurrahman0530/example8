@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MessagesController;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,9 +29,14 @@ Route::get('/register', [AuthController::class, 'register'])->middleware('guest'
 Route::post('/register', [AuthController::class, 'storeRegister']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
-Route::get('/profile', [DashboardController::class, 'profile'])->middleware('auth');
+Route::get('/profile/{id}', [DashboardController::class, 'profile'])->middleware('auth');
 
 Route::get('/manage-role', [DashboardController::class, 'manageRole'])->middleware('auth');
+Route::get('/form-edit-user/{id}', [DashboardController::class, 'editUser'])->middleware('auth');
+Route::post('/user-edit', [DashboardController::class, 'updateUser']);
 
 Route::post('/create-group', [DashboardController::class, 'storeGroup']);
-Route::get('/message/{id}', [MessagesController::class, 'showMessage']);
+Route::post('/join-group', [DashboardController::class, 'joinGroup']);
+Route::post('/edit-group', [DashboardController::class, 'updateGroup']);
+
+Route::get('/message/{id}', [MessagesController::class, 'showMessage'])->middleware('auth');
