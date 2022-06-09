@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+
 @if (session()->has('success'))
 <div class="alert alert-success alert-dismissible fade show col-md-3 container-fluid" role="alert">
     {{ session('success') }}
@@ -63,9 +64,14 @@
                                   <div class="dropdown-menu dropdown-menu-end border py-2" aria-labelledby="profile-dropdown-0">
                                       @if (Auth::user()->role == 1)
                                       <a class="dropdown-item"data-bs-toggle="modal" data-bs-target="#createGroup">Edit Group</a>
-                                      <a class="dropdown-item text-danger" href="#!">Delete Group</a>
+                                      <a class="dropdown-item text-danger" href="/delete-group/{{ $data['group']->id }}">Delete Group</a>
                                       @endif
-                                      <a class="dropdown-item text-danger" href="#!">Leave Group</a>
+                                      <form action="/leave-group" method="post">
+                                        @csrf
+                                        <input type="number" name="idGroup" value="{{ $data['group']->id }}" hidden>
+                                        <input type="number" name="idUser" value="{{ Auth::user()->id }}" hidden>
+                                        <button class="dropdown-item text-danger" type="submit">Leave Group</button>
+                                      </form>
                                   </div>
                               </div>
                           </div>
@@ -75,33 +81,37 @@
                         <div class="title" id="member-title-1">
                           <h6 class="btn btn-link btn-accordion hover-text-decoration-none" href="#members-1" data-bs-toggle="collapse" aria-expanded="false" aria-controls="members-1">Members</h6>
                         </div>
-                            <div class="d-flex align-items-center py-2 hover-actions-trigger">
-                                <div class="avatar avatar-xl">
-                                    <img class="rounded-circle" src="../assets/img/team/2.jpg" alt=""> 
+                        @foreach ($data['userGroup'] as $ug)
+                        <div class="d-flex align-items-center py-2 hover-actions-trigger">
+                          <div class="avatar avatar-xl">
+                              <img class="rounded-circle" src="{{ asset('storage/'.$ug->profile) }}" alt=""> 
+                          </div>
+                          <div class="flex-1 ms-2 d-flex justify-content-between">
+                              <div>
+                                  <h6 class="mb-0">
+                                    <a class="text-700" href="#">{{ $ug->fullname }}</a>
+                                  </h6>
+                                  @if ($ug->role == 1)
+                                  <div class="fs--2 text-400">Pengelola</div>
+                                  @else
+                                  <div class="fs--2 text-400">Pengguna</div>
+                                  @endif
+                              </div>
+                              @if (Auth::user()->role == 1)
+                              <div class="dropdown hover-actions position-relative dropdown-active-trigger z-index-1">
+                                <button class="btn btn-link btn-sm text-400 dropdown-toggle dropdown-caret-none" type="button" id="user-settings-dropdown-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <svg class="svg-inline--fa fa-ellipsis-h fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-h" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
+                                        <path fill="currentColor" d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"> </path>
+                                    </svg>
+                                  </button>
+                                <div class="dropdown-menu dropdown-menu-end py-2 border" aria-labelledby="user-settings-dropdown-0">
+                                  <a class="dropdown-item text-danger" href="/delete/{{ $ug->user_id }}">Kick</a>
                                 </div>
-                                <div class="flex-1 ms-2 d-flex justify-content-between">
-                                    <div>
-                                        <h6 class="mb-0">
-                                          <a class="text-700" href="../pages/user/profile.html">Antony Hopkins</a>
-                                        </h6>
-                                        <div class="fs--2 text-400">Admin</div>
-                                    </div>
-                                    @if (Auth::user()->role == 1)
-                                    <div class="dropdown hover-actions position-relative dropdown-active-trigger z-index-1">
-                                      <button class="btn btn-link btn-sm text-400 dropdown-toggle dropdown-caret-none" type="button" id="user-settings-dropdown-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <svg class="svg-inline--fa fa-ellipsis-h fa-w-16" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-h" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg="">
-                                              <path fill="currentColor" d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"> </path>
-                                          </svg>
-                                          <!-- <span class="fas fa-ellipsis-h"></span> Font Awesome fontawesome.com -->
-                                        </button>
-                                      <div class="dropdown-menu dropdown-menu-end py-2 border" aria-labelledby="user-settings-dropdown-0">
-                                        <a class="dropdown-item" href="#!">View Profile</a>
-                                        <a class="dropdown-item" href="#!">Kick</a>
-                                      </div>
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
+                              </div>
+                              @endif
+                          </div>
+                        </div>
+                        @endforeach
                     </div>
                   </div>
               </div>
@@ -124,7 +134,7 @@
                 @else
                 <div class="d-flex p-3">
                   <div class="avatar avatar-l me-2">
-                      <img class="rounded-circle" src="{{ asset('images/'.$m->profile) }}" alt="">
+                      <img class="rounded-circle" src="{{ asset('storage/'.$m->profile) }}" alt="">
                   </div>
                   <div class="flex-1">
                       <div class="w-xxl-75">
@@ -138,14 +148,14 @@
                 </div>
                 @endif
                 @endforeach
-                  
               </div>
-
           </div>
       </div>
-      <form class="chat-editor-area">
-          <input class="emojiarea-editor form-control outline-none scrollbar" placeholder="Type your message" type="text" name="message">
-          <button class="btn btn-primary" type="submit">Send</button>
+      <form class="chat-editor-area" action="/send-message" method="POST">
+        @csrf
+        <input type="number" name="userGroup" value="{{ $data['group']->id }}" hidden>
+        <input class="emojiarea-editor form-control outline-none scrollbar" placeholder="Type your message" type="text" name="message">
+        <button class="btn btn-primary" type="submit">Send</button>
       </form>
     </div>
   </div>

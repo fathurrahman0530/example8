@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
@@ -40,6 +41,48 @@ class DashboardController extends Controller
         return view('dashboard.profile', compact('data'));
     }
 
+    public function updateProfile(Request $request)
+    {
+        $idUser = Auth::user()->id;
+
+        $validateData = $request->validate([
+            'email' => 'email:dns',
+            'profile' => 'image|file'
+        ]);
+
+        $getData = User::find($idUser);
+
+        if (empty($request->file)) {
+            $validateData['profile'] = $request->file('profile')->store('images');
+
+            if ($request->password != NULL) {
+                $password = Hash::make($request->password);
+                $getData->update([
+                    'fullname' => $request->fullname,
+                    'username' => $request->username,
+                    'email' => $validateData['email'],
+                    'password' => $password,
+                    'profile' => $validateData['profile']
+                ]);
+            } else {
+                $getData->update([
+                    'fullname' => $request->fullname,
+                    'username' => $request->username,
+                    'email' => $validateData['email'],
+                    'profile' => $validateData['profile']
+                ]);
+            }
+        } else {
+            $getData->update([
+                'fullname' => $request->fullname,
+                'username' => $request->username,
+                'email' => $validateData['email']
+            ]);
+        }
+
+        return redirect('/profile/' . $idUser)->with('success', 'Update Profile Successfuly');
+    }
+
     public function manageRole()
     {
         $data = User::all();
@@ -49,7 +92,7 @@ class DashboardController extends Controller
     public function editUser($id)
     {
         $data = User::find($id);
-        // dd($getData);
+
         return view('dashboard.editUser', compact('data'));
     }
 
@@ -110,5 +153,20 @@ class DashboardController extends Controller
         ]);
 
         return redirect('/message/' . $request->idGrooup)->with('success', 'Updated Group Successfuly');
+    }
+
+    public function leaveGroup(Request $request)
+    {
+        $getParticipan = Paticipan::where('user_id', $request->idUser)->where('group_id', $request->idGroup)->forceDelete();
+        return redirect('/dashboard');
+    }
+
+    public function deleteGroup($id)
+    {
+        Message::where('group_id', $id)->forceDelete();
+        Paticipan::where('group_id', $id)->forceDelete();
+        Group::find($id)->delete();
+        
+        return redirect('/dashboard');
     }
 }

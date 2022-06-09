@@ -30,6 +30,7 @@ Route::post('/register', [AuthController::class, 'storeRegister']);
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
 Route::get('/profile/{id}', [DashboardController::class, 'profile'])->middleware('auth');
+Route::post('/update-profile', [DashboardController::class, 'updateProfile']);
 
 Route::get('/manage-role', [DashboardController::class, 'manageRole'])->middleware('auth');
 Route::get('/form-edit-user/{id}', [DashboardController::class, 'editUser'])->middleware('auth');
@@ -38,5 +39,8 @@ Route::post('/user-edit', [DashboardController::class, 'updateUser']);
 Route::post('/create-group', [DashboardController::class, 'storeGroup']);
 Route::post('/join-group', [DashboardController::class, 'joinGroup']);
 Route::post('/edit-group', [DashboardController::class, 'updateGroup']);
+Route::post('/leave-group', [DashboardController::class, 'leaveGroup']);
+Route::get('/delete-group/{id}', [DashboardController::class, 'deleteGroup'])->middleware('auth');
 
 Route::get('/message/{id}', [MessagesController::class, 'showMessage'])->middleware('auth');
+Route::post('/send-message', [MessagesController::class, 'sendMessage']);

@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Message extends Model
 {
     use HasFactory;
+
+    protected $tables = 'messages';
+    protected $guarded = ['id'];
 }

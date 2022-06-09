@@ -107,7 +107,11 @@
                             <a class="nav-link pe-0" id="navbarDropdownUser" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <div class="avatar avatar-xl">
+                                    @if (Auth::user()->profile)
+                                    <img class="rounded-circle" src="{{asset('storage/'.Auth::user()->profile)}}" alt="" />
+                                    @else
                                     <img class="rounded-circle" src="{{asset('images/default.png')}}" alt="" />
+                                    @endif
                                 </div>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end py-0" aria-labelledby="navbarDropdownUser">
