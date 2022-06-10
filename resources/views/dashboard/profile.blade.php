@@ -22,6 +22,7 @@
           @else
           <img src="{{asset('images/default.png')}}" width="200" alt="" data-dz-thumbnail="data-dz-thumbnail">
           @endif
+          <input type="hidden" name="oldImage" value="{{ $data->profile }}">
           <input class="d-none" id="profile-image" name="profile" type="file">
           <label class="mb-0 overlay-icon d-flex flex-center" for="profile-image">
             <span class="bg-holder overlay overlay-0"></span>

@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -53,24 +54,46 @@ class DashboardController extends Controller
         $getData = User::find($idUser);
 
         if (empty($request->file)) {
-            $validateData['profile'] = $request->file('profile')->store('images');
+            if ($request->file('profile')) {
+                if ($request->oldImage) {
+                    Storage::delete($request->oldImage);
+                }
+                $validateData['profile'] = $request->file('profile')->store('images');
+            }
 
             if ($request->password != NULL) {
                 $password = Hash::make($request->password);
-                $getData->update([
-                    'fullname' => $request->fullname,
-                    'username' => $request->username,
-                    'email' => $validateData['email'],
-                    'password' => $password,
-                    'profile' => $validateData['profile']
-                ]);
+                if ($request->file('profile')) {
+                    $getData->update([
+                        'fullname' => $request->fullname,
+                        'username' => $request->username,
+                        'email' => $validateData['email'],
+                        'password' => $password,
+                        'profile' => $validateData['profile']
+                    ]);
+                } else {
+                    $getData->update([
+                        'fullname' => $request->fullname,
+                        'username' => $request->username,
+                        'email' => $validateData['email'],
+                        'password' => $password,
+                    ]);
+                }
             } else {
-                $getData->update([
-                    'fullname' => $request->fullname,
-                    'username' => $request->username,
-                    'email' => $validateData['email'],
-                    'profile' => $validateData['profile']
-                ]);
+                if ($request->file('profile')) {
+                    $getData->update([
+                        'fullname' => $request->fullname,
+                        'username' => $request->username,
+                        'email' => $validateData['email'],
+                        'profile' => $validateData['profile']
+                    ]);
+                } else {
+                    $getData->update([
+                        'fullname' => $request->fullname,
+                        'username' => $request->username,
+                        'email' => $validateData['email'],
+                    ]);
+                }
             }
         } else {
             $getData->update([
@@ -108,7 +131,6 @@ class DashboardController extends Controller
         ]);
 
         return redirect('/manage-role')->with('success', 'Update User Successfuly');
-        // dd($request);
     }
 
     public function storeGroup(Request $request)
@@ -148,9 +170,20 @@ class DashboardController extends Controller
     {
         $data = Group::find($request->idGrooup);
 
-        $data->update([
-            'name_group' => $request->name_group
-        ]);
+        if ($request->file('pictures')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+            $images = $request->file('pictures')->store('images');
+            $data->update([
+                'name_group' => $request->name_group,
+                'pictures' => $images
+            ]);
+        } else {
+            $data->update([
+                'name_group' => $request->name_group
+            ]);
+        }
 
         return redirect('/message/' . $request->idGrooup)->with('success', 'Updated Group Successfuly');
     }
@@ -166,7 +199,7 @@ class DashboardController extends Controller
         Message::where('group_id', $id)->forceDelete();
         Paticipan::where('group_id', $id)->forceDelete();
         Group::find($id)->delete();
-        
+
         return redirect('/dashboard');
     }
 }

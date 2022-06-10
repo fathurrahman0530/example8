@@ -44,11 +44,9 @@ class AuthController extends Controller
             'password' => 'required|min:8|max:255'
         ]);
 
-        // $validatedData['password'] = bcrypt($validatedData['password']);
         $validatedData['password'] = Hash::make($validatedData['password']);
 
         User::create($validatedData);
-        // $request->session()->flash('success', 'Registration successfuly!!! Please login..');
 
         return redirect('/login')->with('success', 'Registration successfuly!!! Please login..');
     }

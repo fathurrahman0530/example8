@@ -18,7 +18,13 @@
 @foreach ($data['group'] as $row)
   <div class="col-lg mt-4">
     <div class="card col-lg-3" style="width: 15rem;">
-      <div class="card-img-top"><img class="img-fluid" src="{{asset('images/'.$row->pictures)}}" alt="Card image cap" /></div>
+      <div class="card-img-top">
+        @if ($row->pictures)
+        <img class="img-fluid" src="{{asset('storage/'.$row->pictures)}}" alt="Card image cap" />
+        @else  
+        <img class="img-fluid" src="{{asset('images/group.png')}}" alt="Card image cap" />
+        @endif
+      </div>
       <div class="card-body">
         <h5 class="card-title">{{ $row->name_group }}</h5>
         @if (Auth::user()->role == 1)

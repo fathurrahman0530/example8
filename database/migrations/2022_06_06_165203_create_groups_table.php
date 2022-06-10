@@ -17,7 +17,7 @@ class CreateGroupsTable extends Migration
             $table->id();
             $table->string('name_group');
             $table->string('code')->default(Str::random(3));
-            $table->string('pictures')->default('group.png');
+            $table->string('pictures')->nullable();
             $table->timestamps();
         });
     }

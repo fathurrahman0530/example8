@@ -47,7 +47,11 @@
                   <div class="h-100 overflow-auto scrollbar">
                       <div class="d-flex position-relative align-items-center p-3 border-bottom">
                           <div class="avatar avatar-xl">
-                              <img class="rounded-circle" src="{{asset('images/' . $data['group']->pictures)}}" alt="">
+                            @if ($data['group']->pictures)
+                            <img class="rounded-circle" src="{{asset('storage/' . $data['group']->pictures)}}" alt="">
+                            @else
+                            <img class="rounded-circle" src="{{asset('images/group.png')}}" alt="">
+                            @endif
                           </div>
                           <div class="flex-1 ms-2 d-flex flex-between-center">
                               <h6 class="mb-0">
@@ -84,7 +88,11 @@
                         @foreach ($data['userGroup'] as $ug)
                         <div class="d-flex align-items-center py-2 hover-actions-trigger">
                           <div class="avatar avatar-xl">
-                              <img class="rounded-circle" src="{{ asset('storage/'.$ug->profile) }}" alt=""> 
+                            @if ($ug->profile)
+                            <img class="rounded-circle" src="{{ asset('storage/'.$ug->profile) }}" alt="">                                
+                            @else
+                            <img class="rounded-circle" src="{{ asset('images/default.png') }}" alt="">                                
+                            @endif
                           </div>
                           <div class="flex-1 ms-2 d-flex justify-content-between">
                               <div>
@@ -134,7 +142,11 @@
                 @else
                 <div class="d-flex p-3">
                   <div class="avatar avatar-l me-2">
-                      <img class="rounded-circle" src="{{ asset('storage/'.$m->profile) }}" alt="">
+                    @if ($m->profile) 
+                    <img class="rounded-circle" src="{{ asset('storage/'.$m->profile) }}" alt="">
+                    @else
+                    <img class="rounded-circle" src="{{ asset('images/default.png') }}" alt="">
+                    @endif
                   </div>
                   <div class="flex-1">
                       <div class="w-xxl-75">
@@ -167,7 +179,7 @@
       <div class="position-absolute top-0 end-0 mt-2 me-2 z-index-1">
         <button class="btn-close btn btn-sm btn-circle d-flex flex-center transition-base" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="/edit-group" method="POST">
+      <form action="/edit-group" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="modal-body p-0">
           <div class="rounded-top-lg py-3 ps-4 pe-6 bg-light">
@@ -178,6 +190,11 @@
             <div class="mb-3">
               <label class="col-form-label" for="recipient-name">Name group</label>
               <input class="form-control" id="recipient-name" type="text" name="name_group" value="{{ $data['group']->name_group }}" required>
+            </div>
+            <div class="mb-3">
+              <label class="col-form-label" for="recipient-name">Picture group</label>
+              <input class="form-control" id="recipient-name" type="file" name="pictures">
+              <input type="hidden" name="oldImage" value="{{ $data['group']->pictures }}">
             </div>
           </div>
         </div>
