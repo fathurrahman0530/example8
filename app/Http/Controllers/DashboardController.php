@@ -202,4 +202,11 @@ class DashboardController extends Controller
 
         return redirect('/dashboard');
     }
+
+    public function kickUser(Request $request)
+    {
+        Paticipan::where('group_id', $request->idGroup)->where('user_id', $request->idUser)->forceDelete();
+
+        return redirect('/message/' . $request->idGroup);
+    }
 }

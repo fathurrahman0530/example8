@@ -41,6 +41,7 @@ Route::post('/join-group', [DashboardController::class, 'joinGroup']);
 Route::post('/edit-group', [DashboardController::class, 'updateGroup']);
 Route::post('/leave-group', [DashboardController::class, 'leaveGroup']);
 Route::get('/delete-group/{id}', [DashboardController::class, 'deleteGroup'])->middleware('auth');
+Route::post('/kick', [DashboardController::class, 'kickUser'])->middleware('auth');
 
 Route::get('/message/{id}', [MessagesController::class, 'showMessage'])->middleware('auth');
 Route::post('/send-message', [MessagesController::class, 'sendMessage']);

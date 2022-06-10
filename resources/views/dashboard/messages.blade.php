@@ -1,7 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
 @if (session()->has('success'))
 <div class="alert alert-success alert-dismissible fade show col-md-3 container-fluid" role="alert">
     {{ session('success') }}
@@ -89,9 +88,9 @@
                         <div class="d-flex align-items-center py-2 hover-actions-trigger">
                           <div class="avatar avatar-xl">
                             @if ($ug->profile)
-                            <img class="rounded-circle" src="{{ asset('storage/'.$ug->profile) }}" alt="">                                
+                            <img class="rounded-circle mt-4" src="{{ asset('storage/'.$ug->profile) }}" alt="">                                
                             @else
-                            <img class="rounded-circle" src="{{ asset('images/default.png') }}" alt="">                                
+                            <img class="rounded-circle mt-4" src="{{ asset('images/default.png') }}" alt="">                                
                             @endif
                           </div>
                           <div class="flex-1 ms-2 d-flex justify-content-between">
@@ -113,7 +112,13 @@
                                     </svg>
                                   </button>
                                 <div class="dropdown-menu dropdown-menu-end py-2 border" aria-labelledby="user-settings-dropdown-0">
-                                  <a class="dropdown-item text-danger" href="/delete/{{ $ug->user_id }}">Kick</a>
+                                  <form action="/kick" method="post" class="dropdown-item text-danger">
+                                    @csrf
+                                    <input type="hidden" name="idGroup" value="{{ $data['group']->id }}">
+                                    <input type="hidden" name="idUser" value="{{$ug->user_id}}">
+                                    <button type="submit" name="kick" class="dropdown-item text-danger">Kick</button>
+                                  </form>
+                                  {{-- <a class="dropdown-item text-danger" href="/delete/{{ $ug->user_id }}">Kick</a> --}}
                                 </div>
                               </div>
                               @endif
@@ -127,6 +132,7 @@
               {{-- {{ $message = $data['message'] }} --}}
               <div class="chat-content-scroll-area scrollbar">
                 
+                {{-- {{ dd($data['message']); }} --}}
                 @foreach ($data['message'] as $m)
                 @if ($m->user_id == Auth::user()->id)
                 <div class="d-flex p-3">
@@ -143,14 +149,15 @@
                 <div class="d-flex p-3">
                   <div class="avatar avatar-l me-2">
                     @if ($m->profile) 
-                    <img class="rounded-circle" src="{{ asset('storage/'.$m->profile) }}" alt="">
+                    <img class="rounded-circle mt-4" src="{{ asset('storage/'.$m->profile) }}" alt="">
                     @else
-                    <img class="rounded-circle" src="{{ asset('images/default.png') }}" alt="">
+                    <img class="rounded-circle mt-4" src="{{ asset('images/default.png') }}" alt="">
                     @endif
                   </div>
                   <div class="flex-1">
+                    <div class=""><b>{{ $m->fullname }}</b></div>
                       <div class="w-xxl-75">
-                          <div class="hover-actions-trigger d-flex align-items-center">
+                          <div class="hover-actions-trigger d-flex mt-1 align-items-center">
                               <div class="chat-message bg-200 p-2 rounded-2">{{ $m->message }}</div>
                           </div>
                           <div class="text-400 fs--2"><span>{{ $m->created_at }}</span>
