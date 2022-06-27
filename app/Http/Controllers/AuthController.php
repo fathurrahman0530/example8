@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Message;
+use App\Models\Paticipan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -48,7 +50,16 @@ class AuthController extends Controller
 
         User::create($validatedData);
 
-        return redirect('/login')->with('success', 'Registration successfuly!!! Please login..');
+        return redirect('/manage-role')->with('success', 'Registration successfuly!!! Please login..');
+    }
+
+    public function deleteUser($id)
+    {
+        User::find($id)->delete();
+        Paticipan::where('user_id', $id)->forceDelete();
+        Message::where('user_id', $id)->forceDelete();
+
+        return redirect('/manage-role');
     }
 
     public function logout(Request $request)

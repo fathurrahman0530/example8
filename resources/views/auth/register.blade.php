@@ -2,10 +2,13 @@
 
 @section('content')
 <div class="row min-vh-100 flex-center g-0">
+
     <div class="col-lg-8 col-xxl-5 position-relative">
+
         <img class="bg-auth-circle-shape" src="../../../assets/img/icons/spot-illustrations/bg-shape.png" alt="" width="250">
         <img class="bg-auth-circle-shape-2" src="../../../assets/img/icons/spot-illustrations/shape-1.png" alt="" width="150">
       <div class="card col-md overflow-hidden z-index-1">
+        
         <div class="card-body p-0">
           <div class="g-0 h-100">
             <div class="col-md d-flex flex-center">
@@ -15,7 +18,7 @@
                     <h3>Account Register</h3>
                   </div>
                 </div>
-                <form action="/register" method="POST">
+                <form action="/add-members" method="POST">
                     @csrf
                   <div class="mb-3">
                     <label class="form-label" for="card-fullname">Fullname</label>
@@ -37,9 +40,9 @@
                   </div>
                   <div class="mb-3">
                     <button class="btn btn-primary d-block w-100 mt-3" type="submit" name="submit">Register</button>
+                    <a href="/manage-role" class="btn btn-secondary d-block w-100 mt-3">Cancel</a>
                   </div>
                 </form>
-                <small>Already account? <a href="/register">Login Now!</a></small>
               </div>
             </div>
           </div>

@@ -25,8 +25,9 @@ Route::get('/login', [AuthController::class, 'login'])->name('login')->middlewar
 Route::post('/login', [AuthController::class, 'authenticate']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
-Route::get('/register', [AuthController::class, 'register'])->middleware('guest');
-Route::post('/register', [AuthController::class, 'storeRegister']);
+Route::get('/add-members', [AuthController::class, 'register'])->middleware('auth');
+Route::post('/add-members', [AuthController::class, 'storeRegister']);
+Route::get('/delete-user/{id}', [AuthController::class, 'deleteUser'])->middleware('auth');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth');
 Route::get('/profile/{id}', [DashboardController::class, 'profile'])->middleware('auth');
